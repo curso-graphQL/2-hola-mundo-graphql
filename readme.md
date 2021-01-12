@@ -180,3 +180,36 @@ const schema: GraphQLSchema = makeExecutableSchema({
 
 export default schema;
 ~~~
+
+6. Sustituir graphiQL por apollo server
+
+Primero desinstalamos la dependencia de express-graphql
+
+```npm uninstall express-graphql```
+
+Instalamos la dependencia de apollo server
+
+```npm install apollo-server-express```
+
+Modificamos el archivo *server.ts* para incluir los cambios y utilizar el playground de apollo server
+
+~~~
+...
+import { ApolloServer } from 'apollo-server-express';
+import { createServer } from 'http';
+...
+
+...
+onst server = new ApolloServer({
+  schema,
+  introspection: true
+});
+server.applyMiddleware({ app });
+
+const httpServer = createServer(app);
+
+httpServer.listen(
+  { port: PORT },
+  () => console.log(`Hola Mundo API GraphQL http://localhost:${PORT}/graphql`)
+...
+~~~
