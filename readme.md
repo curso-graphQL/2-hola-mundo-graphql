@@ -115,12 +115,68 @@ app.use('/', graphqlHTTP({
 }));
 ~~~
 
-5. Sustituir graphiQL por apollo server
+5. Refactorización
 
-Primero desinstalamos la dependencia de express-graphql
+En src creamos dos nuevos directorios para los resolvers y para el schema.
 
-```npm uninstall express-graphql```
+En el directorio resolvers creamos dos archivos:
 
-Instalamos la dependencia de apollo server
+~~~
+\\query.ts
+import { IResolvers } from 'graphql-tools';
 
-```npm install apollo-server-express```
+const query: IResolvers = {
+  Query: {
+    hola(): string {
+      return 'Hola Mundo';
+    },
+    holaConNombre( __: void, { nombre }): string {
+      return `Hola Mundo, hola ${nombre}`;
+    },
+    holaAlCursoGraphQL(): string {
+      return "Hola Mundo al curso GraphQL";
+    }
+  }
+}
+
+export default query;
+~~~
+
+~~~
+\\resolversMap.ts
+import { IResolvers } from 'graphql-tools';
+import query from './query';
+
+const resolvers: IResolvers = {
+  ...query
+}
+
+export default resolvers;
+~~~
+
+En el directorio schema creamos dos archivos:
+
+~~~
+\\ schema.graphql
+type Query {
+  hola: String!
+  holaConNombre(nombre: String!): String!
+  holaAlCursoGraphQL: String!
+}
+~~~
+
+~~~
+\\ index.ts
+import { GraphQLSchema } from 'graphql';
+import { makeExecutableSchema } from 'graphql-tools';
+import 'graphql-import-node';
+import typeDefs from './schema.graphql';
+import resolvers from '../resolvers/resolversMap';
+
+const schema: GraphQLSchema = makeExecutableSchema({
+  typeDefs,
+  resolvers
+});
+
+export default schema;
+~~~
