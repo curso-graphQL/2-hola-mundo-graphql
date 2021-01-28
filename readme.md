@@ -1,9 +1,25 @@
 # Hola Mundo en GraphQL
 
+
+1. [Crear/configurar archivos necesarios](#config)
+2. [Instalación de dependencias](#dependencies)
+3. [Instalación de dependencias](#package)
+4. [Inicializar el servidor express con los ajustes por defecto](#express)
+5. [Pasar de Node Express a GraphQL](#to-graphql)
+5. [Pasar de Node Express a GraphQL](#to-graphql)
+
+<hr>
+
+<a name="config"></a>
+
 ## 1. Crear/configurar archivos necesarios
 
 1. Generamos el archivo *package.json* inciando el proyecto con el comando ```npm init```.
 2. Generamos el archivo *tsconfig.json* para configurar typeScript mediante el comando ```npx tsc --init --rootDir src --outDir build --lib dom,es6 module commonjs --removeComments --target es6```
+
+<hr>
+
+<a name="dependencies"></a>
 
 ## 2. Instalación de dependencias
 
@@ -26,6 +42,10 @@ En este proyecto necesitarremos las siguientes dependencias:
 ### Dependencias de desarrollo:
 ```npm install @types/compression @types/express @types/cors @types/express-graphql @types/node @types/graphql -D```
 
+<hr>
+
+<a name="package"></a>
+
 ## 3. Configuración de scripts package.json
 
 En el archivo *package.json* incluimos la siguiente propiedad:
@@ -42,7 +62,11 @@ Creamos en la raiz la carpeta src y dentro de ella el archivo server.js (punto d
 
 Para comprobar que funciona correctamente en *server.js* ponemos un console log que podrá verse en la terminal cuando ejecutemos ```npm start:dev```
 
-## 4. Inicializar el servidor express con los ajustes por defecto.
+<hr>
+
+<a name="express"></a>
+
+## 4. Inicializar el servidor express con los ajustes por defecto
 
 ~~~
 import express from 'express';
@@ -63,6 +87,10 @@ app.listen(
   () => console.log(`Hola Mundo API GraphQL http://localhost:${PORT}`)
 )
 ~~~
+
+<hr>
+
+<a name="to-graphql"></a>
 
 ## 5. Pasar de Node Express a GraphQL
 
