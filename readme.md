@@ -49,7 +49,7 @@ En este proyecto necesitarremos las siguientes dependencias:
 ## 3. Configuración de scripts package.json
 
 En el archivo *package.json* incluimos la siguiente propiedad:
-~~~
+~~~json
   "scripts": {
     "start": "node build/server.js",
     "build": "tsc -p . && ncp src/schema build/schema",
@@ -68,7 +68,7 @@ Para comprobar que funciona correctamente en *server.js* ponemos un console log 
 
 ## 4. Inicializar el servidor express con los ajustes por defecto
 
-~~~
+~~~js
 import express from 'express';
 import compression from 'compression';
 import cors from 'cors';
@@ -97,7 +97,7 @@ app.listen(
 Debemos seguir los siguientes pasos inicialmente en el archivo *server.ts* que luego refactorizaremos a nuevos archivos.
 
 1. Definimos los **types**:
-~~~
+~~~graphql
 const typeDefs = `
   type Query {
     hola: String!
@@ -108,7 +108,7 @@ const typeDefs = `
 ~~~
 
 2. Definimos los **resolvers**:
-~~~
+~~~js
 const resolvers: IResolvers = {
   Query: {
     hola(): string {
@@ -126,7 +126,7 @@ const resolvers: IResolvers = {
 
 3. Relacionamos los **types** con los **resolvers**
 
-~~~
+~~~js
 const schema: GraphQLSchema = makeExecutableSchema({
   typeDefs,
   resolvers
@@ -135,8 +135,9 @@ const schema: GraphQLSchema = makeExecutableSchema({
 
 4. Modificamos la ruta para utilizar GraphQL. Debemos importar graphQlHTTP para poder utilizarlo.
 
-```import { graphqlHTTP } from 'express-graphql';```
-~~~
+~~~js
+import { graphqlHTTP } from 'express-graphql';
+
 app.use('/', graphqlHTTP({
   schema,
   graphiql: true
@@ -149,8 +150,8 @@ En src creamos dos nuevos directorios para los resolvers y para el schema.
 
 En el directorio resolvers creamos dos archivos:
 
-~~~
-\\query.ts
+- *query.ts*
+~~~js
 import { IResolvers } from 'graphql-tools';
 
 const query: IResolvers = {
@@ -170,8 +171,8 @@ const query: IResolvers = {
 export default query;
 ~~~
 
-~~~
-\\resolversMap.ts
+- *resolversMap.ts*
+~~~js
 import { IResolvers } from 'graphql-tools';
 import query from './query';
 
@@ -184,8 +185,8 @@ export default resolvers;
 
 En el directorio schema creamos dos archivos:
 
-~~~
-\\ schema.graphql
+- *schema.graphql*
+~~~graphql
 type Query {
   hola: String!
   holaConNombre(nombre: String!): String!
@@ -193,8 +194,8 @@ type Query {
 }
 ~~~
 
-~~~
-\\ index.ts
+- *index.ts*
+~~~js
 import { GraphQLSchema } from 'graphql';
 import { makeExecutableSchema } from 'graphql-tools';
 import 'graphql-import-node';
@@ -221,14 +222,14 @@ Instalamos la dependencia de apollo server
 
 Modificamos el archivo *server.ts* para incluir los cambios y utilizar el playground de apollo server
 
-~~~
+~~~js
 ...
 import { ApolloServer } from 'apollo-server-express';
 import { createServer } from 'http';
 ...
 
 ...
-onst server = new ApolloServer({
+const server = new ApolloServer({
   schema,
   introspection: true
 });
